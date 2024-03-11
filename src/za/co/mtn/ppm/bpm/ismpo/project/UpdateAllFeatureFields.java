@@ -55,7 +55,6 @@ public class UpdateAllFeatureFields {
         IspmoItProjectProcessor processor = new IspmoItProjectProcessor();
         log("<<-- Start Update ALL Feature Fields -->>");
         log("<<- Get IT Project Data with SQL Query ->>");
-        // Fix the SQL String and error handling
         HashMap<String, String> itProjectInformation = processor.getItProjectData(ppmBaseUrl, username, password, SQL_REST_URL, requestId, projectRequestType);
         log("<<- Get IT Project Milestones with SQL Query ->>");
         ArrayList<ProjectMilestoneValues> projectMilestoneArraylist = processor.getItProjectMilestoneData(ppmBaseUrl, username, password, SQL_REST_URL, requestId);

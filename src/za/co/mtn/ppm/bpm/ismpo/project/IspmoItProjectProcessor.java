@@ -1,5 +1,7 @@
 package za.co.mtn.ppm.bpm.ismpo.project;
 
+//import okhttp3.*;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
@@ -85,6 +87,7 @@ public class IspmoItProjectProcessor {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
+//                .callTimeout(90,TimeUnit.SECONDS)
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
         // JSON Payload
@@ -156,6 +159,15 @@ public class IspmoItProjectProcessor {
             } else {
                 // Exit the processing for non-200 status codes
                 log("Getting IT Project Data Method Failed : HTTP error code : " + response.code());
+                // Print the Response Body with Failure message
+                JSONObject jsonFailureObj;
+                if (response.body() != null) {
+                    jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                    for (Object key : jsonFailureObj.keySet()) {
+                        log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                    }
+                }
+
             }
         } catch (IOException e) {
             log("Getting IT Project Data Method IO Exception Failure");
@@ -247,6 +259,14 @@ public class IspmoItProjectProcessor {
             } else {
                 // Exit the processing for non-200 status codes
                 log("Getting IT Project Milestone Data Method Failed : HTTP error code : " + response.code());
+                // Print the Response Body with Failure message
+                JSONObject jsonFailureObj;
+                if (response.body() != null) {
+                    jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                    for (Object key : jsonFailureObj.keySet()) {
+                        log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                    }
+                }
             }
         } catch (IOException e) {
             log("Getting IT Project Milestone Data Method IO Exception Failure");
@@ -362,6 +382,15 @@ public class IspmoItProjectProcessor {
             } else {
                 // Exit the processing for non-200 status codes
                 log("Getting PPM Feature Data Method Failed : HTTP error code : " + response.code());
+                // Print the Response Body with Failure message
+                JSONObject jsonFailureObj;
+                if (response.body() != null) {
+                    jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                    for (Object key : jsonFailureObj.keySet()) {
+                        log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                    }
+                }
+
             }
         } catch (IOException e) {
             log("Getting IPPM Feature Data Method IO Exception Failure");
@@ -452,6 +481,14 @@ public class IspmoItProjectProcessor {
             } else {
                 // Exit the processing for non-200 status codes
                 log("Getting Feature IDs linked to IT Project Method Failed : HTTP error code : " + response.code());
+                // Print the Response Body with Failure message
+                JSONObject jsonFailureObj;
+                if (response.body() != null) {
+                    jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                    for (Object key : jsonFailureObj.keySet()) {
+                        log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                    }
+                }
             }
         } catch (IOException e) {
             log("Getting Feature IDs linked to IT Project Method IO Exception Failure");
@@ -527,7 +564,7 @@ public class IspmoItProjectProcessor {
      */
     private JSONObject setItReportingAnalyticsProjectDataSql(String projectRequestId) {
         // Create the sql string
-        String sql = "SELECT kfpp.request_id AS ispmo_prj_num, kfpp.project_name AS description, replace(kfpp.prj_project_manager_username, '#@#', '; ') AS ispmo_pm, initcap(ppr.overall_health_indicator) AS ispmo_prj_rag, kfpp.prj_business_unit_meaning AS ispm_epmo_busi krhd.visible_parameter1 AS ispmo_epmo_sub_area, kr.description AS ispmo_prj_short_desc, krhd.visible_parameter25 AS ispmo_func_test_auto, krhd.visible_parameter26 AS ispmo_perf_test, krhd.visible_parameter27 AS ispmo_serv_virtual";
+        String sql = "SELECT kfpp.request_id AS ispmo_prj_num, kfpp.project_name AS description, replace(kfpp.prj_project_manager_username, '#@#', '; ') AS ispmo_pm, initcap(ppr.overall_health_indicator) AS ispmo_prj_rag, kfpp.prj_business_unit_meaning AS ispm_epmo_busi, krhd.visible_parameter1 AS ispmo_epmo_sub_area, kr.description AS ispmo_prj_short_desc, krhd.visible_parameter25 AS ispmo_func_test_auto, krhd.visible_parameter26 AS ispmo_perf_test, krhd.visible_parameter27 AS ispmo_serv_virtual";
         sql = sql.concat(getItProjectFromWhereClauses(projectRequestId));
         // Create a JSON Object for the SQL Runner REST Request
         JSONObject jsonObj = new JSONObject();
