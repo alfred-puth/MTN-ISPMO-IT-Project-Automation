@@ -1161,9 +1161,9 @@ public class IspmoItProjectProcessor {
         fieldArray.add(tokensLastUpdateDateObj);
         fieldArray.add(tokenEntityLastUpdateDateObj);
         // Add ISPMO_PRJ_STATUS tohen and string value
-        setRequestFieldJsonObj(detailsFieldPrefix + "ISPMO_PRJ_STATUS", itProjectStatus);
+        fieldArray.add(setRequestFieldJsonObj(detailsFieldPrefix + "ISPMO_PRJ_STATUS", itProjectStatus));
         // Add ISPMO_PRJ_PHASE tohen and string value
-        setRequestFieldJsonObj(detailsFieldPrefix + "ISPMO_PRJ_PHASE", itProjectPhase);
+        fieldArray.add(setRequestFieldJsonObj(detailsFieldPrefix + "ISPMO_PRJ_PHASE", itProjectPhase));
         // Set the Field Object
         JSONObject fieldObj = new JSONObject();
         fieldObj.put("field", fieldArray);
