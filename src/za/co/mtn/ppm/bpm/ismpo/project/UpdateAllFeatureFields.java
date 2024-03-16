@@ -51,6 +51,7 @@ public class UpdateAllFeatureFields {
         final String password = args[2];
         final String requestId = args[3];
         final String projectRequestType = args[4];
+
         // Create new instances of IspmoItProjectProcessorOld class
         IspmoItProjectProcessor processor = new IspmoItProjectProcessor();
         log("<<-- Start Update ALL Feature Fields -->>");
@@ -109,8 +110,6 @@ public class UpdateAllFeatureFields {
                 octaneInitiatedFeatureCreateCounter++;
             }
         }
-
-
     }
 
     /**
@@ -123,6 +122,12 @@ public class UpdateAllFeatureFields {
         log("REST_USER_PASSWORD: args[2] (PPM System User Password)");
         log("PRJ_REQUEST_ID: args[3] (IT Project ID/No)");
         log("IT_PROJECT_REQUEST_TYPE: args[3] (IT Project Request Type Name)");
+    }
+
+    private static void measureMemoryUsage(String prefixMessage) {
+        long memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        double memoryUsageMB = memoryUsage / (1024.0 * 1024.0); // Convert bytes to megabytes
+        System.out.printf("%s Memory Usage: %.2f MB\n", prefixMessage, memoryUsageMB);
     }
 
     /**

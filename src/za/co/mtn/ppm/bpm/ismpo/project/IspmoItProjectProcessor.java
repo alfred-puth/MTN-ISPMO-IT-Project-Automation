@@ -799,14 +799,33 @@ public class IspmoItProjectProcessor {
                 }
             }
         } catch (IOException e) {
-            log("Getting PPM Feature Request Update Method IO Exception Failure");
+            log("Getting PPM Feature Request Update Method IO Exception Failure" + e);
             throw new RuntimeException(e);
         } finally {
             if (response != null) {
-                response.close();
                 if (!response.isSuccessful()) {
+                    // Exit the processing for non-200 status codes
+                    log("Getting PPM Feature Request Update Method Failed : HTTP error code : " + response.code());
+                    // Print the Response Body with Failure message
+                    JSONObject jsonFailureObj;
+                    if (response.body() != null) {
+                        try {
+                            jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                            // Print to console all the failures in this response body
+                            for (Object key : jsonFailureObj.keySet()) {
+                                log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                            }
+                        } catch (IOException e) {
+                            log("Getting PPM Feature Request Update Response Body Method IO Exception Failure" + e);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    // Close the Response connection
+                    response.close();
                     System.exit(1);
                 }
+                // Close the Response connection
+                response.close();
             }
         }
 
@@ -880,10 +899,29 @@ public class IspmoItProjectProcessor {
             throw new RuntimeException(e);
         } finally {
             if (response != null) {
-                response.close();
                 if (!response.isSuccessful()) {
+                    // Exit the processing for non-200 status codes
+                    log("Getting PPM Feature Request Update Method Failed : HTTP error code : " + response.code());
+                    // Print the Response Body with Failure message
+                    JSONObject jsonFailureObj;
+                    if (response.body() != null) {
+                        try {
+                            jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                            // Print to console all the failures in this response body
+                            for (Object key : jsonFailureObj.keySet()) {
+                                log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                            }
+                        } catch (IOException e) {
+                            log("Getting PPM Feature Request Update Response Body Method IO Exception Failure" + e);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    // Close the Response connection
+                    response.close();
                     System.exit(1);
                 }
+                // Close the Response connection
+                response.close();
             }
         }
 
@@ -953,14 +991,33 @@ public class IspmoItProjectProcessor {
                 }
             }
         } catch (IOException e) {
-            log("Getting Feature Request Status and Phase Fields Method IO Exception Failure");
+            log("Getting Feature Request Status and Phase Fields Method IO Exception Failure" + e);
             throw new RuntimeException(e);
         } finally {
             if (response != null) {
-                response.close();
                 if (!response.isSuccessful()) {
+                    // Exit the processing for non-200 status codes
+                    log("Getting Feature Request Status and Phase Fields Method Failed : HTTP error code : " + response.code());
+                    // Print the Response Body with Failure message
+                    JSONObject jsonFailureObj;
+                    if (response.body() != null) {
+                        try {
+                            jsonFailureObj = (JSONObject) JSONSerializer.toJSON(response.body().string());
+                            // Print to console all the failures in this response body
+                            for (Object key : jsonFailureObj.keySet()) {
+                                log("Failure Key: " + key.toString() + " | Value: " + jsonFailureObj.get(key));
+                            }
+                        } catch (IOException e) {
+                            log("Getting Feature Request Status and Phase Fields Response Body Method IO Exception Failure" + e);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    // Close the response connection
+                    response.close();
                     System.exit(1);
                 }
+                // Close the response connection
+                response.close();
             }
         }
 
@@ -998,7 +1055,7 @@ public class IspmoItProjectProcessor {
         JSONArray fieldArray = new JSONArray();
         fieldArray.add(tokensLastUpdateDateObj);
         fieldArray.add(tokenEntityLastUpdateDateObj);
-        // Set the HTML Field Array for the IT Project Milestones
+        // Set the HTML Field Array for the IT Project Milestone
         fieldArray.add(setProjectMilestoneHtmlJson(itProjectMilestoneObjArray, detailsFieldPrefix, "ISPMO_MILESTONES"));
         // Iterate through the PPM Feature Request Field Tokens
         for (Map.Entry<String, String> featureFieldSet : featureFieldsObj.entrySet()) {
@@ -1019,7 +1076,7 @@ public class IspmoItProjectProcessor {
                         descriptionFieldObject = setFeatureDescription(headerFieldPrefix, "DESCRIPTION", itProjectFieldsObj.get("ISPMO_PRJ_NUM"), itProjectFieldsObj.get("DESCRIPTION"));
                     }
                     // check if Feature description a derived Feature description is different
-                    if (!featureFieldValue.equalsIgnoreCase(descriptionFieldObject.getString(headerFieldPrefix + featureKey))) {
+                    if (!featureFieldValue.equalsIgnoreCase(descriptionFieldObject.get("stringValue").toString())) {
                         // Set the fiedArray for the Feature Description
                         fieldArray.add(descriptionFieldObject);
                     }
@@ -1391,8 +1448,13 @@ public class IspmoItProjectProcessor {
                 .concat(epmoProjectNumber).concat(")");
         // Set Json Object Vairable
         JSONObject descriptionFieldJsonObject = new JSONObject();
-        // Add String to Json Object
-        descriptionFieldJsonObject.put(prefix + fieldToken, result);
+        // Add token to description object
+        descriptionFieldJsonObject.put("token", prefix + fieldToken);
+        // Declare and Instantiate the strValue Array
+        JSONArray stringValueArray = new JSONArray();
+        stringValueArray.add(result);
+        // Add stringValue array to description object
+        descriptionFieldJsonObject.put("stringValue", stringValueArray);
         // Return the JSONObject
         return descriptionFieldJsonObject;
     }
@@ -1416,8 +1478,13 @@ public class IspmoItProjectProcessor {
                 .concat(itProjectName);
         // Set Json Object Vairable
         JSONObject descriptionFieldJsonObject = new JSONObject();
-        // Add String to Json Object
-        descriptionFieldJsonObject.put(prefix + fieldToken, result);
+        // Add token to description object
+        descriptionFieldJsonObject.put("token", prefix + fieldToken);
+        // Declare and Instantiate the strValue Array
+        JSONArray stringValueArray = new JSONArray();
+        stringValueArray.add(result);
+        // Add stringValue array to description object
+        descriptionFieldJsonObject.put("stringValue", stringValueArray);
         // Return the JSONObject
         return descriptionFieldJsonObject;
     }
